@@ -153,21 +153,34 @@ const showPosts = (posts) => {
         productsContainer.appendChild(div);
     });
 };
-
 const displayLikedPosts = () => {
-    const likedPosts = getLikedPosts();
-    likedPosts.forEach((post) => {
-        const div = createPost(post);
-        document.getElementById( "liked" ).appendChild(div);
-    });
+  const likedPosts = getLikedPosts();
+
+  const container = document.getElementById( "liked" );
+  while(container.children.length > 1){
+    const lastChildren = container.children[container.children.length - 1];
+    container.removeChild(lastChildren);
+  }
+
+  likedPosts.forEach((post) => {
+      const div = createPost(post);
+      document.getElementById( "liked" ).appendChild(div);
+  });
 };
 
 const displayReportedPosts = () => {
-    const reportedPosts = getReportedPosts();
-    posts.forEach((post) => {
-        const div = createPost(post);
-        document.getElementById( "reported" ).appendChild(div);
-    });
+  const reportedPosts = getReportedPosts();
+  
+  const container = document.getElementById( "reported" );
+  while(container.children.length > 1){
+    const lastChildren = container.children[container.children.length - 1];
+    container.removeChild(lastChildren);
+  }
+
+  reportedPosts.forEach((post) => {
+      const div = createPost(post);
+      document.getElementById( "reported" ).appendChild(div);
+  });
 };
 
 const loadPosts = async () =>{
