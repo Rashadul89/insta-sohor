@@ -51,86 +51,97 @@ const switchTab = (id) => {
 };
 
 const createPost = (post) => {
-    const image = post.image;
-    const userImage=post.userImage;
-    const div = document.createElement( "article" );
-    div.classList.add( "post" );
-    div.innerHTML = `
-              <div class="post__header">
-                <div class="post__profile">
-                  <a
-                    href="https://github.com/ProgrammingHero1"
-                    target="_blank"
-                    class="post__avatar"
-                  >
-                    <img src="${userImage}" alt="User Picture" />
-                  </a>
-                  <a href="#" class="post__user">phero</a>
-                </div>
+  const image = post.image;
+  const userImage = post.userImage;
+  const commentsContent = makeCommentsContent(post.comments);
+  // now make a function that take post comments and make then as a hrml content. finally return the html.content and use the variable in comment section
+  const div = document.createElement( "article" );
+  div.classList.add( "post" );
+  div.innerHTML = `
+            <div class="post__header">
+              <div class="post__profile">
+                <a
+                  href="https://github.com/ProgrammingHero1"
+                  target="_blank"
+                  class="post__avatar"
+                >
+                  <img src="${userImage}" alt="User Picture" />
+                </a>
+                <a href="#" class="post__user">phero</a>
+              </div>
 
-                <button class="post__more-options">
-                  <i class="fa-solid fa-ellipsis"></i>
+              <button class="post__more-options">
+                <i class="fa-solid fa-ellipsis"></i>
+              </button>
+            </div>
+
+            <div class="post__content">
+              <div class="post__medias">
+                <img
+                  class="post__media"
+                  src="${image}"
+                  alt="Post Content"
+                />
+              </div>
+            </div>
+
+            <div class="post__footer">
+              <div class="post__buttons">
+                <button class="post__button" onclick="addToLiked(${post.id})">
+                <i class="fa-solid fa-heart ${isLiked(post.id) && "text-danger"}"></i>
+                  
+                </button>
+                <button class="post__button">
+                  <i class="fa-solid fa-comment"></i>
+                </button>
+                
+
+                <div class="post__indicators"></div>
+
+                <button class="post__button post__button--align-right" onclick="reportPost(${
+                    post.id
+                })">
+                  <i class="fa-solid fa-ban"></i>
                 </button>
               </div>
 
-              <div class="post__content">
-                <div class="post__medias">
-                  <img
-                    class="post__media"
-                    src="${image}"
-                    alt="Post Content"
-                  />
+              <div class="post__content">${displayContent(post.description)}</div>
+
+              <div class="post__infos">
+                <div class="post__likes">
+                  <a href="#" class="post__likes-avatar">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="User Picture" />
+                  </a>
+
+                  <span>Liked by
+                    <a class="post__name--underline" href="#">user123</a> and
+                    <a href="#">73 others</a></span>
                 </div>
+
+                <hr/>
+
+                ${commentsContent}
               </div>
-
-              <div class="post__footer">
-                <div class="post__buttons">
-                  <button class="post__button" onclick="addToLiked(${post.id})">
-                  <i class="fa-solid fa-heart ${isLiked(post.id) && "text-danger"}"></i>
-                    
-                  </button>
-                  <button class="post__button">
-                    <i class="fa-solid fa-comment"></i>
-                  </button>
-                  
-
-                  <div class="post__indicators"></div>
-
-                  <button class="post__button post__button--align-right" onclick="reportPost(${
-                      post.id
-                  })">
-                    <i class="fa-solid fa-ban"></i>
-                  </button>
-                </div>
-
-                <div class="post__content">${displayContent(post.description)}</div>
-
-                <div class="post__infos">
-                  <div class="post__likes">
-                    <a href="#" class="post__likes-avatar">
-                      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="User Picture" />
+            </div>
+    `;
+  return div;
+};
+const makeCommentsContent = (comments) => {
+  let divContent = ""; 
+  comments.forEach((comment) => {
+    divContent += `<div class="post__description">
+                  <small>
+                    <a class="post__name--underline" href="#">
+                        ${comment.user}
                     </a>
-
-                    <span>Liked by
-                      <a class="post__name--underline" href="#">user123</a> and
-                      <a href="#">73 others</a></span>
-                  </div>
-
-                  <hr/>
-
-                  <div class="post__description">
-                    <small>
-                      <a class="post__name--underline" href="#">
-                          ${post.comments?.user}
-                      </a>
-                      ${post.comments?.text}
-                    </small>
-                  </div>
+                    ${comment.text}
+                  </small>
+                  <br/>
                   <span class="post__date-time">30 minutes ago</span>
-                </div>
-              </div>
-      `;
-    return div;
+                </div>                
+    `;
+  });
+  return divContent;
 };
 
 const showPosts = (posts) => {
